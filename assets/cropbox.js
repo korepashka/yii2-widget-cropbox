@@ -102,7 +102,18 @@
 
         obj.image.onload = function() {
             setBackground();
+            var pw = (el.width() - parseInt(obj.image.width) * obj.ratio) / 2;
+            var ph = (el.height() - parseInt(obj.image.height) * obj.ratio) / 2;
 
+            var cropInfo = [];
+            cropInfo[0] = {
+                x: pw,
+                y: ph,
+                dw: options.cropOptions.boxWidth,
+                dh: options.cropOptions.boxHeight,
+                ratio: 1
+            };
+            $('#' + options.cropOptions.idCropInfo).val(JSON.stringify(cropInfo));
             $th.bind('mousedown', imgMouseDown);
             $th.bind('mousemove', imgMouseMove);
             $(window).bind('mouseup', imgMouseUp);
@@ -202,7 +213,8 @@
             var reader = new FileReader();
             reader.onload = function(e) {
                 crop = new cropbox({
-                    imgSrc: e.target.result
+                    imgSrc: e.target.result,
+                    cropOptions: options
                 }, $th.find('.imageBox'));
             };
             reader.readAsDataURL(this.files[0]);
